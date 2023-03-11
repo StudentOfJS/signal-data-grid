@@ -2,7 +2,9 @@
 
 ## future development thoughts
 
-- fundamental: could performance be improved by using a different data structure?
+- table feature: data fetching
+- table feature: fetching middleware function (allow users to transform data to our format)
+- table feature: fetch crud operations
 - table feature: column sorting
 - table feature: row grouping
 - table feature: computed cells, totals, summary, custom
@@ -15,5 +17,10 @@
 - styling: editable column icon?
 - styling: row striping
 - styling: mobile - stacking or overflow scroll
+
+### fundamental: row data
+
+Array<Record<string, string | number | boolean | null>> seems like the corect choice for data being provided.
+Should more proceessing be done at the table level to provide a more complete datastructure?
 
 [Edit on StackBlitz ⚡️](https://stackblitz.com/edit/react-signals-data-grid-biamky)
