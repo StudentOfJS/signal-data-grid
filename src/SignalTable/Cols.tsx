@@ -30,6 +30,7 @@ export function Cols() {
 function Sort({ field }: { field: string }) {
   return (
     <button
+      type="button"
       onClick={() => {
         sortBy.value = field;
         switch (sortDirection.value) {
