@@ -1,96 +1,89 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { columns } from './TableContext';
 
 export function Cols() {
   return (
     <thead className="bg-white border-b">
       <tr>
-        {columns.value.map(({ field, isSortable }) =>
-          isSortable ? (
-            <SortableCol name={field} />
-          ) : (
-            <th
-              className="text-sm font-medium text-gray-900 px-6 py-4 text-center"
-              scope="col"
-              key={field}
-            >
-              {field}
-            </th>
-          )
-        )}
+        {columns.value.map(({ field, isSortable }) => (
+          <th
+            className="text-sm font-medium text-gray-900 px-6 py-4 text-center"
+            scope="col"
+            key={field}
+            style={{ position: 'relative' }}
+          >
+            {field}
+            {isSortable && <Sort />}
+          </th>
+        ))}
       </tr>
     </thead>
   );
 }
 
-function SortableCol({ name }: { name: string }) {
+function Sort() {
   const [sort, setSort] = useState<'asc' | 'dsc' | 'none'>('none');
   return (
-    <th
-      className="flex items-center justify-center text-sm font-medium text-gray-900 px-6 py-4 text-center"
-      scope="col"
+    <button
+      onClick={() => {
+        switch (sort) {
+          case 'none':
+            setSort('asc');
+            break;
+          case 'asc':
+            setSort('dsc');
+            break;
+          default:
+            setSort('none');
+        }
+      }}
+      style={{
+        position: 'absolute',
+        right: 0,
+        bottom: 5,
+        padding: 5,
+        transition: 'all 0.8s ease-in',
+      }}
     >
-      <div>{name}</div>
-      <div className="pt-2 pl-4">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        style={{ width: 15, height: 15, pointerEvents: 'none' }}
+      >
         {sort === 'asc' && <AscSortIcon />}
         {sort === 'dsc' && <DescSortIcon />}
-        {sort === 'none' && <UnsortedIcon />}
-      </div>
-    </th>
+        {sort === 'none' && <UnsortedPath />}
+      </svg>
+    </button>
   );
 }
 
-function UnsortedIcon() {
+function UnsortedPath() {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 20 20"
-      fill="currentColor"
-      className="w-5 h-5"
-      style={{ width: 15, height: 15 }}
-    >
-      <path
-        fillRule="evenodd"
-        d="M2.24 6.8a.75.75 0 001.06-.04l1.95-2.1v8.59a.75.75 0 001.5 0V4.66l1.95 2.1a.75.75 0 101.1-1.02l-3.25-3.5a.75.75 0 00-1.1 0L2.2 5.74a.75.75 0 00.04 1.06zm8 6.4a.75.75 0 00-.04 1.06l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75a.75.75 0 00-1.5 0v8.59l-1.95-2.1a.75.75 0 00-1.06-.04z"
-        clipRule="evenodd"
-      />
-    </svg>
+    <path
+      fillRule="evenodd"
+      d="M2.24 6.8a.75.75 0 001.06-.04l1.95-2.1v8.59a.75.75 0 001.5 0V4.66l1.95 2.1a.75.75 0 101.1-1.02l-3.25-3.5a.75.75 0 00-1.1 0L2.2 5.74a.75.75 0 00.04 1.06zm8 6.4a.75.75 0 00-.04 1.06l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75a.75.75 0 00-1.5 0v8.59l-1.95-2.1a.75.75 0 00-1.06-.04z"
+      clipRule="evenodd"
+    />
   );
 }
 
 function DescSortIcon() {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      style={{ width: 14, height: 14 }}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75"
-      />
-    </svg>
+    <path
+      fillRule="evenodd"
+      d="M10 5a.75.75 0 01.75.75v6.638l1.96-2.158a.75.75 0 111.08 1.04l-3.25 3.5a.75.75 0 01-1.08 0l-3.25-3.5a.75.75 0 111.08-1.04l1.96 2.158V5.75A.75.75 0 0110 5z"
+      clipRule="evenodd"
+    />
   );
 }
 function AscSortIcon() {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      style={{ width: 14, height: 14 }}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75"
-      />
-    </svg>
+    <path
+      fillRule="evenodd"
+      d="M10 15a.75.75 0 01-.75-.75V7.612L7.29 9.77a.75.75 0 01-1.08-1.04l3.25-3.5a.75.75 0 011.08 0l3.25 3.5a.75.75 0 11-1.08 1.04l-1.96-2.158v6.638A.75.75 0 0110 15z"
+      clipRule="evenodd"
+    />
   );
 }
