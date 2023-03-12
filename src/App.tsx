@@ -33,6 +33,7 @@ function App() {
           },
           {
             field: 'test2',
+            isSortable: true,
           },
           {
             field: 'test3',

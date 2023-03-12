@@ -1,27 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SubmitWrapper } from '../SignalTable/SubmitWrapper';
-import { columns, rows, fk } from '../SignalTable/TableContext';
+import { columns, rows, fk, type TableType } from '../SignalTable/TableContext';
 import { Cols } from './Cols';
 import { Rows } from './Rows';
 
-interface TableInterface {
-  rowData: Array<Record<string, string | number | boolean | null>>;
-  foreignKey: string;
-  columnDefs: Array<{
-    field: string;
-    cellType?: 'text' | 'number' | 'date' | 'boolean' | 'email';
-    isEditable?: boolean;
-    validation?: {
-      // zod schema???
-    };
-  }>;
-  renderButton?: () => JSX.Element;
-  handleSubmit?: (
-    data: Array<Record<string, string | number | boolean | null | undefined>>
-  ) => void;
-}
-
-export const Table: React.FC<TableInterface> = ({
+export const Table: React.FC<TableType> = ({
   foreignKey,
   rowData,
   columnDefs,
@@ -29,11 +12,15 @@ export const Table: React.FC<TableInterface> = ({
   renderButton,
 }) => {
   const [_, setReady] = useState<boolean>(false);
-  useEffect(() => {
+  // use later to provide table reset function
+  const init = useCallback(() => {
     columns.value = columnDefs;
     rows.value = rowData;
     fk.value = foreignKey;
     setReady(true);
+  }, [columnDefs]);
+  useEffect(() => {
+    init();
   }, [columnDefs]);
   return (
     <SubmitWrapper handleSubmit={handleSubmit}>
