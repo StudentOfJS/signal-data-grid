@@ -1,4 +1,5 @@
-import { signal } from '@preact/signals-react';
+import { signal, computed } from '@preact/signals-react';
+import { sort } from '../SignalTable/sort';
 
 export type ColumnDefsType = Array<{
   field: string;
@@ -18,9 +19,18 @@ export interface TableType {
   ) => void;
 }
 
+export type SortDirectionType = 'asc' | 'dsc' | 'none';
+
 export const columns = signal<ColumnDefsType>([]);
 export const cellChangeMap = signal(new Map());
 export const rows = signal<
   Array<Record<string, string | number | boolean | null>>
 >([]);
 export const fk = signal<string>('');
+export const sortBy = signal<string>('');
+export const sortDirection = signal<SortDirectionType>('none');
+export const sortedRows = computed(() =>
+  sortDirection.value === 'none'
+    ? rows.value
+    : sort(rows.value, sortBy.value, sortDirection.value === 'dsc')
+);

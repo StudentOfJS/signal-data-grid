@@ -1,5 +1,11 @@
-import { useRef, useState } from 'react';
-import { columns } from './TableContext';
+import { useSignalEffect } from '@preact/signals-react';
+import { useState } from 'react';
+import {
+  columns,
+  sortBy,
+  sortDirection,
+  SortDirectionType,
+} from './TableContext';
 
 export function Cols() {
   return (
@@ -13,7 +19,7 @@ export function Cols() {
             style={{ position: 'relative' }}
           >
             {field}
-            {isSortable && <Sort />}
+            {isSortable && <Sort field={field} />}
           </th>
         ))}
       </tr>
@@ -21,20 +27,20 @@ export function Cols() {
   );
 }
 
-function Sort() {
-  const [sort, setSort] = useState<'asc' | 'dsc' | 'none'>('none');
+function Sort({ field }: { field: string }) {
   return (
     <button
       onClick={() => {
-        switch (sort) {
+        sortBy.value = field;
+        switch (sortDirection.value) {
           case 'none':
-            setSort('asc');
+            sortDirection.value = 'asc';
             break;
           case 'asc':
-            setSort('dsc');
+            sortDirection.value = 'dsc';
             break;
           default:
-            setSort('none');
+            sortDirection.value = 'asc';
         }
       }}
       style={{
@@ -51,12 +57,28 @@ function Sort() {
         fill="currentColor"
         style={{ width: 15, height: 15, pointerEvents: 'none' }}
       >
-        {sort === 'asc' && <AscSortIcon />}
-        {sort === 'dsc' && <DescSortIcon />}
-        {sort === 'none' && <UnsortedPath />}
+        <PathWarrior field={field} />
       </svg>
     </button>
   );
+}
+
+function PathWarrior({ field }: { field: string }) {
+  const [sort, setSort] = useState<SortDirectionType>('none');
+  useSignalEffect(() => {
+    if (sortBy.value === field) {
+      setSort(sortDirection.value);
+    } else {
+      setSort('none');
+    }
+  });
+  if (sort === 'asc') {
+    return <AscSortIcon />;
+  }
+  if (sort === 'dsc') {
+    return <DescSortIcon />;
+  }
+  return <UnsortedPath />;
 }
 
 function UnsortedPath() {

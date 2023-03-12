@@ -1,9 +1,14 @@
-import { Fragment } from 'react';
-import { columns, fk, rows } from '../SignalTable/TableContext';
+import { useSignalEffect } from '@preact/signals-react';
+import { Fragment, useState } from 'react';
+import { columns, fk, sortedRows } from '../SignalTable/TableContext';
 import { Row } from './Row';
 
 export function Rows() {
-  let mapped = rows.value.map((row) => {
+  const [rows, setRows] = useState(sortedRows.value);
+  useSignalEffect(() => {
+    setRows(sortedRows.value);
+  });
+  let mapped = rows.map((row) => {
     let uniqueId = row[fk.value] as string;
     return (
       <Fragment key={`${uniqueId}`}>
