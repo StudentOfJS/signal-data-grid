@@ -1,13 +1,9 @@
 import { useSignalEffect } from '@preact/signals-react';
-import { useState } from 'react';
-import {
-  columns,
-  sortBy,
-  sortDirection,
-  SortDirectionType,
-} from './TableContext';
+import { useContext, useState } from 'react';
+import { SortDirectionType, TableContext } from '../SignalTable/Table';
 
 export function Cols() {
+  const { columns } = useContext(TableContext);
   return (
     <thead className="bg-white border-b">
       <tr>
@@ -28,6 +24,7 @@ export function Cols() {
 }
 
 function Sort({ field }: { field: string }) {
+  const { sortBy, sortDirection } = useContext(TableContext);
   return (
     <button
       type="button"
@@ -65,6 +62,7 @@ function Sort({ field }: { field: string }) {
 }
 
 function PathWarrior({ field }: { field: string }) {
+  const { sortBy, sortDirection } = useContext(TableContext);
   const [sort, setSort] = useState<SortDirectionType>('none');
   useSignalEffect(() => {
     if (sortBy.value === field) {

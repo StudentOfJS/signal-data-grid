@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { cellChangeMap, fk, rows } from '../SignalTable/TableContext';
+import { ReactNode, useContext } from 'react';
+import { TableContext } from '../SignalTable/Table';
 
 interface SubmitProps {
   children: ReactNode;
@@ -9,12 +9,13 @@ interface SubmitProps {
 }
 
 export function SubmitWrapper({ children, handleSubmit }: SubmitProps) {
+  const { cellChangeMap, fk, sortedRows } = useContext(TableContext);
   const submitHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     let r = [...cellChangeMap.value]
       .map(([key, value]) => {
         let [rowId, name] = key.split('|');
-        let row = rows.value.find((r) => String(r[fk.value]) === rowId);
+        let row = sortedRows.value.find((r) => String(r[fk.value]) === rowId);
         if (row) {
           row[name] = value;
         }

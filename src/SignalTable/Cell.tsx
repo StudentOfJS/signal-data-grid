@@ -1,7 +1,7 @@
 import { useSignal, useSignalEffect } from '@preact/signals-react';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import { datefix } from '../SignalTable/dateFix';
-import { cellChangeMap, columns } from './TableContext';
+import { TableContext } from '../SignalTable/Table';
 
 export function Cell({
   cellValue,
@@ -12,6 +12,7 @@ export function Cell({
   name: string;
   rowId: string;
 }) {
+  const { columns, cellChangeMap } = useContext(TableContext);
   const cv = useSignal(cellValue);
   const ref = useRef<HTMLInputElement>(null);
   let colDef = columns.value.find((x) => x.field === name);

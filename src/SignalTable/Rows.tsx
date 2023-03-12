@@ -1,9 +1,10 @@
 import { useSignalEffect } from '@preact/signals-react';
-import { Fragment, useState } from 'react';
-import { columns, fk, sortedRows } from '../SignalTable/TableContext';
+import { Fragment, useContext, useState } from 'react';
+import { TableContext } from '../SignalTable/Table';
 import { Row } from './Row';
 
 export function Rows() {
+  const { columns, fk, sortedRows } = useContext(TableContext);
   const [rows, setRows] = useState(sortedRows.value);
   useSignalEffect(() => {
     setRows(sortedRows.value);
