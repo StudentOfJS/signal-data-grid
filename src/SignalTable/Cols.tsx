@@ -3,11 +3,11 @@ import { useContext, useState } from 'react';
 import { SortDirectionType, TableContext } from '../SignalTable/Table';
 
 export function Cols() {
-  const { columns } = useContext(TableContext);
+  const ctx = useContext(TableContext);
   return (
     <thead className="bg-white border-b">
       <tr>
-        {columns.value.map(({ field, isSortable }) => (
+        {ctx?.columns.value.map(({ field, isSortable }) => (
           <th
             className="text-sm font-medium text-gray-900 px-6 py-4 text-center"
             scope="col"
@@ -24,21 +24,24 @@ export function Cols() {
 }
 
 function Sort({ field }: { field: string }) {
-  const { sortBy, sortDirection } = useContext(TableContext);
+  const ctx = useContext(TableContext);
   return (
     <button
       type="button"
       onClick={() => {
-        sortBy.value = field;
-        switch (sortDirection.value) {
-          case 'none':
-            sortDirection.value = 'asc';
-            break;
-          case 'asc':
-            sortDirection.value = 'dsc';
-            break;
-          default:
-            sortDirection.value = 'asc';
+        if (ctx) {
+          let { sortBy, sortDirection } = ctx;
+          sortBy.value = field;
+          switch (sortDirection.value) {
+            case 'none':
+              sortDirection.value = 'asc';
+              break;
+            case 'asc':
+              sortDirection.value = 'dsc';
+              break;
+            default:
+              sortDirection.value = 'asc';
+          }
         }
       }}
       style={{
@@ -62,11 +65,11 @@ function Sort({ field }: { field: string }) {
 }
 
 function PathWarrior({ field }: { field: string }) {
-  const { sortBy, sortDirection } = useContext(TableContext);
+  const ctx = useContext(TableContext);
   const [sort, setSort] = useState<SortDirectionType>('none');
   useSignalEffect(() => {
-    if (sortBy.value === field) {
-      setSort(sortDirection.value);
+    if (ctx?.sortBy.value === field) {
+      setSort(ctx?.sortDirection.value ?? 'none');
     } else {
       setSort('none');
     }

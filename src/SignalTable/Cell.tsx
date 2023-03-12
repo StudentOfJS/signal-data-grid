@@ -12,21 +12,21 @@ export function Cell({
   name: string;
   rowId: string;
 }) {
-  const { columns, cellChangeMap } = useContext(TableContext);
+  const ctx = useContext(TableContext);
   const cv = useSignal(cellValue);
   const ref = useRef<HTMLInputElement>(null);
-  let colDef = columns.value.find((x) => x.field === name);
+  let colDef = ctx?.columns.value.find((x) => x.field === name);
   let type = colDef?.cellOptions?.type ?? 'text';
   useSignalEffect(() => {
     if (!ref.current) return;
-    cellChangeMap.value.delete(`${rowId}|${name}`);
+    ctx?.cellChangeMap.value.delete(`${rowId}|${name}`);
     if (cv.value === '') {
       ref.current.style.backgroundColor = 'crimson';
       ref.current.style.color = 'white';
     } else if (cv.value !== cellValue) {
       ref.current.style.backgroundColor = 'green';
       ref.current.style.color = 'white';
-      cellChangeMap.value.set(`${rowId}|${name}`, cv.value);
+      ctx?.cellChangeMap.value.set(`${rowId}|${name}`, cv.value);
     } else {
       ref.current.style.backgroundColor = 'white';
       ref.current.style.color = 'black';
