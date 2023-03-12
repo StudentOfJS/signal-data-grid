@@ -1,7 +1,17 @@
 # signal-data-grid
 
-## future development thoughts
+## features
+- uses tailwind, easy to theme
+- uses signals to prevent unecessary renders when updating fields
+- uses default html5 for table and inputs
+- column sorting
+- empty field highlighting
+- changed field highlighting
+- editable and non-editable cells
+- date picker cell
 
+
+## future development
 - table feature: data fetching
 - table feature: fetching middleware function (allow users to transform data to our format)
 - table feature: fetch crud operations
