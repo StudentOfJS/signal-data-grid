@@ -2,8 +2,8 @@ import { createContext, useCallback, useEffect, useState } from 'react';
 import {
   useSignal,
   useComputed,
-  ReadonlySignal,
-  Signal,
+  type ReadonlySignal,
+  type Signal,
 } from '@preact/signals-react';
 import { sort } from '../SignalTable/sort';
 import { SubmitWrapper } from '../SignalTable/SubmitWrapper';
@@ -12,10 +12,11 @@ import { Rows } from './Rows';
 
 type ColumnDefsType = Array<{
   field: string;
-  cellType?: 'text' | 'number' | 'date' | 'boolean' | 'email';
+  // cellType?: 'text' | 'number' | 'date' | 'boolean' | 'email';
+  cellOptions?: React.InputHTMLAttributes<HTMLInputElement>
   isEditable?: boolean;
   isSortable?: boolean;
-  validation?: any; //field schema tbd
+  validation?: (value: string | number | boolean) => boolean // field validation function -> return true if valid
 }>;
 
 interface TableType {

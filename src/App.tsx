@@ -29,17 +29,17 @@ function App() {
           {
             field: 'date',
             isEditable: true,
-            cellType: 'date',
+            cellOptions: { type: 'date' },
           },
           {
             field: 'test2',
-            cellType: 'number',
+            cellOptions: { type: 'number' },
             isSortable: true,
           },
           {
             field: 'test3',
             isEditable: true,
-            cellType: 'email',
+            cellOptions: { type: 'email' },
             isSortable: true,
           },
         ]}
@@ -74,17 +74,17 @@ function App() {
           {
             field: 'date',
             isEditable: true,
-            cellType: 'date',
+            cellOptions: { type: 'date' },
           },
           {
             field: 'test2',
-            cellType: 'number',
+            cellOptions: { type: 'number' },
             isSortable: true,
           },
           {
             field: 'test3',
             isEditable: true,
-            cellType: 'email',
+            cellOptions: { type: 'email' },
             isSortable: true,
           },
         ]}

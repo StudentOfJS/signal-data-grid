@@ -16,7 +16,7 @@ export function Cell({
   const cv = useSignal(cellValue);
   const ref = useRef<HTMLInputElement>(null);
   let colDef = columns.value.find((x) => x.field === name);
-  let type = colDef?.cellType ?? 'text';
+  let type = colDef?.cellOptions?.type ?? 'text';
   useSignalEffect(() => {
     if (!ref.current) return;
     cellChangeMap.value.delete(`${rowId}|${name}`);
@@ -37,7 +37,7 @@ export function Cell({
       {colDef?.isEditable ? (
         <input
           className={`text-sm font-light px-6 py-4 whitespace-nowrap text-center`}
-          type={type}
+          {...colDef?.cellOptions!}
           name={name}
           defaultValue={type === 'date' ? datefix(cellValue) : cellValue}
           onChange={(e) => {
