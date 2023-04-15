@@ -1,33 +1,24 @@
 import './index.css';
 import './App.css';
 import { Table } from './SignalTable/Table';
+import { useEffect, useState } from 'react';
+import { generateTestData, type TestData } from './generateData';
 
 function App() {
+  const [loading, setLoading] = useState<boolean>(true)
+  const [rowData, setRowData] = useState<TestData[]>()
+
+  useEffect(() => {
+    const data = generateTestData(100);
+    setRowData(data)
+    setLoading(false)
+  }, [])
   return (
     <div className="App">
-      <h1>React Signals Data Grid</h1>
+      {loading ? (<h1>Creating mock data</h1>) : (<h1>React Signals Data Grid</h1>)}
       <div className="pt-10 mt-10">
         <Table
-          rowData={[
-            {
-              id: 1,
-              date: '10/03/2023',
-              test2: 10,
-              test3: 'bob@test.com',
-            },
-            {
-              id: 2,
-              date: '01/01/2023',
-              test2: 40,
-              test3: 'jane@test.com',
-            },
-            {
-              id: 3,
-              date: '12/12/2022',
-              test2: 30,
-              test3: 'tammy@test.com',
-            },
-          ]}
+          rowData={rowData}
           columnDefs={[
             {
               field: 'date',

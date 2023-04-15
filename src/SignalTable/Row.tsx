@@ -1,7 +1,7 @@
-import { Fragment } from 'react';
+import { Fragment, memo } from 'react';
 import { Cell } from './Cell';
 
-export function Row({
+export const Row = memo(function ({
   row,
   rowId,
 }: {
@@ -20,4 +20,4 @@ export function Row({
       })}
     </tr>
   );
-}
+});

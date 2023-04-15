@@ -9,6 +9,7 @@ import { sort } from '../SignalTable/sort';
 import { SubmitWrapper } from '../SignalTable/SubmitWrapper';
 import { Cols } from './Cols';
 import { Rows } from './Rows';
+import { Row } from '../SignalTable/Row';
 
 type ColumnDefsType = Array<{
   field: string;
@@ -20,7 +21,7 @@ type ColumnDefsType = Array<{
 }>;
 
 interface TableType {
-  rowData: Array<Record<string, string | number | boolean | null>>;
+  rowData?: Array<Record<string, string | number | boolean | null>>;
   foreignKey: string;
   columnDefs: ColumnDefsType;
   renderButton?: () => JSX.Element;
@@ -30,6 +31,8 @@ interface TableType {
 }
 
 export type SortDirectionType = 'asc' | 'dsc' | 'none';
+
+type RowDataType = Record<string,any> & RowDataType
 
 export const TableContext = createContext<{
   sortedRows: ReadonlySignal<
@@ -50,10 +53,11 @@ export const Table: React.FC<TableType> = ({
   renderButton,
 }) => {
   const [_, setReady] = useState<boolean>(false);
+  const [rd, setRd] = useState<Array<RowDataType>>()
   const columns = useSignal<ColumnDefsType>([]);
   const cellChangeMap = useSignal(new Map());
   const rows = useSignal<
-    Array<Record<string, string | number | boolean | null>>
+  Array<{ id: string; element: JSX.Element; }>
   >([]);
   const fk = useSignal<string>('');
   const sortBy = useSignal<string>('');
@@ -66,13 +70,40 @@ export const Table: React.FC<TableType> = ({
   // use later to provide table reset function
   const init = useCallback(() => {
     columns.value = columnDefs;
-    rows.value = rowData;
+    rows.value = rd!;
     fk.value = foreignKey;
     setReady(true);
-  }, [columnDefs]);
+  }, [columnDefs, rd]);
+
   useEffect(() => {
     init();
-  }, [columnDefs]);
+  }, [columnDefs, rd]);
+
+  useEffect(() => {
+    if(rowData) {
+      let x = rowData.map(r => {
+        let uniqueId = r[foreignKey] as string;
+        return (
+          {
+            ...r,
+            id: uniqueId,
+            element: (
+              <Row
+                row={
+                  Object.entries(r).filter((rr) =>
+                  columnDefs.map((c) => c.field).includes(rr[0])
+                  ) as [string, string][]
+                }
+                rowId={`${uniqueId}`}
+              />
+            )
+          }
+        )
+      })
+      setRd(x)
+    }
+  }, [rowData]);
+
   return (
     <TableContext.Provider
       value={{
