@@ -6,10 +6,10 @@ export function Cols() {
   const ctx = useContext(TableContext);
   return (
     <thead className="bg-white border-b">
-      <tr className="border border-slate-300">
+      <tr className="border border-slate-400">
         {ctx?.columns.value.map(({ field, isSortable }) => (
           <th
-            className="text-sm font-medium text-gray-900 px-6 py-4 text-center"
+            className="text-sm font-medium text-white bg-slate-700 px-6 py-4 text-center"
             scope="col"
             key={field}
             style={{ position: 'relative' }}

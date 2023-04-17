@@ -33,6 +33,15 @@ function App() {
               field: 'test3',
               isEditable: true,
               cellOptions: { type: 'email' },
+              validation: (value) => {
+                let at = (value as string).indexOf("@")
+                if(at === -1) return false;
+                let name = (value as string).slice(0, at)
+                if(!name?.length) return false
+                let end = (value as string).slice(at + 1)
+                if(!end?.length || end.length < 5 || (end.slice(end.indexOf("."))?.length ?? 0) < 3) return false
+                return true
+              },
               isSortable: true,
             },
           ]}

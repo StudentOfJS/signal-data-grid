@@ -13,12 +13,13 @@ import { Row } from '../SignalTable/Row';
 
 type ColumnDefsType = Array<{
   field: string;
-  // cellType?: 'text' | 'number' | 'date' | 'boolean' | 'email';
   cellOptions?: React.InputHTMLAttributes<HTMLInputElement>
   isEditable?: boolean;
   isSortable?: boolean;
   validation?: (value: string | number | boolean) => boolean // field validation function -> return true if valid
 }>;
+
+type TableRecordType = Record<string, string | number | boolean | null | JSX.Element | undefined>
 
 interface TableType {
   rowData?: Array<Record<string, string | number | boolean | null>>;
@@ -26,17 +27,15 @@ interface TableType {
   columnDefs: ColumnDefsType;
   renderButton?: () => JSX.Element;
   handleSubmit?: (
-    data: Array<Record<string, string | number | boolean | null | undefined>>
+    data: Array<TableRecordType>
   ) => void;
 }
 
 export type SortDirectionType = 'asc' | 'dsc' | 'none';
 
-type RowDataType = Record<string,any> & RowDataType
-
 export const TableContext = createContext<{
   sortedRows: ReadonlySignal<
-    Record<string, string | number | boolean | null>[]
+    TableRecordType[]
   >;
   sortDirection: Signal<SortDirectionType>;
   sortBy: Signal<string>;
@@ -53,12 +52,10 @@ export const Table: React.FC<TableType> = ({
   renderButton,
 }) => {
   const [_, setReady] = useState<boolean>(false);
-  const [rd, setRd] = useState<Array<RowDataType>>()
+  const [rd, setRd] = useState<Array<TableRecordType>>()
   const columns = useSignal<ColumnDefsType>([]);
   const cellChangeMap = useSignal(new Map());
-  const rows = useSignal<
-  Array<{ id: string; element: JSX.Element; }>
-  >([]);
+  const rows = useSignal<Array<TableRecordType>>([]);
   const fk = useSignal<string>('');
   const sortBy = useSignal<string>('');
   const sortDirection = useSignal<SortDirectionType>('none');
@@ -81,7 +78,7 @@ export const Table: React.FC<TableType> = ({
 
   useEffect(() => {
     if(rowData) {
-      let x = rowData.map(r => {
+      let x: TableRecordType[] = rowData.map(r => {
         let uniqueId = r[foreignKey] as string;
         return (
           {
@@ -116,7 +113,7 @@ export const Table: React.FC<TableType> = ({
       }}
     >
       <SubmitWrapper handleSubmit={handleSubmit}>
-        <table className="min-w-full table-auto border border-slate-400 ">
+        <table className="min-w-full table-auto border border-slate-400">
           <Cols />
           <Rows />
         </table>
