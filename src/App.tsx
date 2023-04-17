@@ -1,5 +1,4 @@
 import './index.css';
-import './App.css';
 import { Table } from './SignalTable/Table';
 import { useEffect, useState } from 'react';
 import { generateTestData, type TestData } from './generateData';
@@ -14,9 +13,9 @@ function App() {
     setLoading(false)
   }, [])
   return (
-    <div className="App">
-      {loading ? (<h1>Creating mock data</h1>) : (<h1>React Signals Data Grid</h1>)}
-      <div className="pt-10 mt-10">
+    <div className="w-full flex flex-col items-center">
+      {loading ? (<h1 className="text-5xl">Creating mock data</h1>) : (<h1 className="text-5xl">React Signals Data Grid</h1>)}
+      <div className="pt-10">
         <Table
           rowData={rowData}
           columnDefs={[

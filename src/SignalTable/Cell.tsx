@@ -33,7 +33,7 @@ export function Cell({
     }
   });
   return (
-    <td>
+    <td className="border border-slate-300">
       {colDef?.isEditable ? (
         <input
           className={`text-sm font-light px-6 py-4 whitespace-nowrap text-center`}

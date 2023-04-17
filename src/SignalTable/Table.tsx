@@ -116,7 +116,7 @@ export const Table: React.FC<TableType> = ({
       }}
     >
       <SubmitWrapper handleSubmit={handleSubmit}>
-        <table className="min-w-full">
+        <table className="min-w-full table-auto border border-slate-400 ">
           <Cols />
           <Rows />
         </table>

@@ -6,7 +6,7 @@ export function Cols() {
   const ctx = useContext(TableContext);
   return (
     <thead className="bg-white border-b">
-      <tr>
+      <tr className="border border-slate-300">
         {ctx?.columns.value.map(({ field, isSortable }) => (
           <th
             className="text-sm font-medium text-gray-900 px-6 py-4 text-center"
@@ -14,8 +14,10 @@ export function Cols() {
             key={field}
             style={{ position: 'relative' }}
           >
+            {/* <div className="flex items-center"> */}
             {field}
             {isSortable && <Sort field={field} />}
+            {/* </div> */}
           </th>
         ))}
       </tr>
@@ -28,6 +30,7 @@ function Sort({ field }: { field: string }) {
   return (
     <button
       type="button"
+      className="m-0 ml-4 p-1"
       onClick={() => {
         if (ctx) {
           let { sortBy, sortDirection } = ctx;
@@ -46,9 +49,8 @@ function Sort({ field }: { field: string }) {
       }}
       style={{
         position: 'absolute',
-        right: 0,
+        right: 5,
         bottom: 5,
-        padding: 5,
         transition: 'all 0.8s ease-in',
       }}
     >
