@@ -23,9 +23,13 @@ export function Cell({
     if (cv.value === '') {
       ref.current.style.backgroundColor = 'crimson';
       ref.current.style.color = 'transparent';
-    } else if (cv.value !== cellValue) {
-      let isValid = colDef?.validation && colDef.validation(cv.value);
+    } else if (cv.value !== cellValue && colDef?.validation) {
+      let isValid = colDef.validation(cv.value);
       ref.current.style.backgroundColor = isValid ? 'green' : 'crimson';
+      ref.current.style.color = 'white';
+      ctx?.cellChangeMap.value.set(`${rowId}|${name}`, cv.value);
+    } else if (cv.value !== cellValue) {
+      ref.current.style.backgroundColor = 'green';
       ref.current.style.color = 'white';
       ctx?.cellChangeMap.value.set(`${rowId}|${name}`, cv.value);
     } else {
