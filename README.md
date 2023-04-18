@@ -1,7 +1,6 @@
 # signal-data-grid
 
 ## features
-
 - uses tailwind, easy to theme
 - uses signals to prevent uneccessary renders when updating fields
 - uses default html5 for table and inputs

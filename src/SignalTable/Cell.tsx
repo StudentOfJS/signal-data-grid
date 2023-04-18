@@ -26,7 +26,7 @@ export function Cell({
     } else if (cv.value !== cellValue) {
       let isValid = colDef?.validation && colDef.validation(cv.value);
       ref.current.style.backgroundColor = isValid ? 'green' : 'crimson';
-      ref.current.style.color = 'transparent';
+      ref.current.style.color = 'white';
       ctx?.cellChangeMap.value.set(`${rowId}|${name}`, cv.value);
     } else {
       ref.current.style.backgroundColor = 'transparent';
