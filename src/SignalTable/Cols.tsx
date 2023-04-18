@@ -5,11 +5,11 @@ import { SortDirectionType, TableContext } from '../SignalTable/Table';
 export function Cols() {
   const ctx = useContext(TableContext);
   return (
-    <thead className="bg-white border-b">
-      <tr className="border border-slate-400">
+    <thead className="bg-white border-b block md:table-header-group">
+      <tr className="border border-slate-400 block md:table-row">
         {ctx?.columns.value.map(({ field, isSortable }) => (
           <th
-            className="text-sm font-medium text-white bg-slate-700 px-6 py-4 text-center"
+            className="text-sm font-medium text-white bg-slate-700 px-6 py-4 text-center block md:table-cell"
             scope="col"
             key={field}
             style={{ position: 'relative' }}

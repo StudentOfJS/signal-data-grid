@@ -9,7 +9,7 @@ export const Row = memo(function ({
   rowId: string;
 }) {
   return (
-    <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+    <tr className="bg-white even:bg-gray-100 border-b transition duration-300 ease-in-out hover:bg-gray-100 block md:table-row">
       {row?.map(([key, value]) => {
         let name = `${key}|${rowId}`;
         return (

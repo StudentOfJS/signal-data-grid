@@ -5,11 +5,11 @@ import {
   type ReadonlySignal,
   type Signal,
 } from '@preact/signals-react';
-import { sort } from '../SignalTable/sort';
-import { SubmitWrapper } from '../SignalTable/SubmitWrapper';
+import { sort } from './sort';
+import { SubmitWrapper } from './SubmitWrapper';
 import { Cols } from './Cols';
 import { Rows } from './Rows';
-import { Row } from '../SignalTable/Row';
+import { Row } from './Row';
 
 type ColumnDefsType = Array<{
   field: string;

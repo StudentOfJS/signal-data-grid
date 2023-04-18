@@ -12,7 +12,7 @@ export function Rows() {
     return null;
   }
   return (
-    <tbody>
+    <tbody className="block md:table-row-group">
       {rows.map((row) => {
         return <Fragment key={row.id as string}>{row.element}</Fragment>;
       })}

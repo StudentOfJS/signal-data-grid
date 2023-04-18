@@ -22,19 +22,20 @@ export function Cell({
     ctx?.cellChangeMap.value.delete(`${rowId}|${name}`);
     if (cv.value === '') {
       ref.current.style.backgroundColor = 'crimson';
-      ref.current.style.color = 'white';
+      ref.current.style.color = 'transparent';
     } else if (cv.value !== cellValue) {
       let isValid = colDef?.validation && colDef.validation(cv.value);
       ref.current.style.backgroundColor = isValid ? 'green' : 'crimson';
-      ref.current.style.color = 'white';
+      ref.current.style.color = 'transparent';
       ctx?.cellChangeMap.value.set(`${rowId}|${name}`, cv.value);
     } else {
-      ref.current.style.backgroundColor = 'white';
+      ref.current.style.backgroundColor = 'transparent';
       ref.current.style.color = 'black';
     }
   });
   return (
-    <td className="border border-slate-300">
+    <td className="border border-slate-300 block md:table-cell">
+      <span className="inline-block w-1/3 md:hidden font-bold">{name}</span>
       {colDef?.isEditable ? (
         <input
           className={`text-sm font-light px-6 py-4 whitespace-nowrap text-center`}
@@ -48,7 +49,7 @@ export function Cell({
         />
       ) : (
         <input
-          className={`text-sm font-light px-6 py-4 whitespace-nowrap text-center`}
+          className={`text-sm font-light px-6 py-4 whitespace-nowrap text-center bg-transparent`}
           type="text"
           name={name}
           value={cellValue}

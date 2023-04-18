@@ -25,8 +25,7 @@
 - cell feature: cell formating function
 - styling: allow passing of classNames or leave to tailwind theming
 - styling: editable column icon?
-- styling: row striping
-- styling: mobile - stacking or overflow scroll
+- styling: mobile - stacking complete 
 
 ### fundamental: row data
 
