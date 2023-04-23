@@ -15,7 +15,7 @@ export function Cell({
   const ctx = useContext(TableContext);
   const cv = useSignal(cellValue);
   const ref = useRef<HTMLInputElement>(null);
-  let colDef = ctx?.columns.value.find((x) => x.field === name);
+  let colDef = ctx?.columnDefs.find((x) => x.field === name);
   let type = colDef?.cellOptions?.type ?? 'text';
   useSignalEffect(() => {
     if (!ref.current) return;

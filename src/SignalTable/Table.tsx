@@ -19,12 +19,16 @@ type ColumnDefsType = Array<{
   validation?: (value: string | number | boolean) => boolean // field validation function -> return true if valid
 }>;
 
+type TableDataType = Array<Record<string, string | number | boolean | null>>
+
 type TableRecordType = Record<string, string | number | boolean | null | JSX.Element | undefined>
 
 interface TableType {
-  rowData?: Array<Record<string, string | number | boolean | null>>;
+  rowData?: TableDataType;
   foreignKey: string;
   columnDefs: ColumnDefsType;
+  groupBy?: string;
+  showGroupByColumn?: boolean;
   renderButton?: () => JSX.Element;
   handleSubmit?: (
     data: Array<TableRecordType>
@@ -39,36 +43,44 @@ export const TableContext = createContext<{
   >;
   sortDirection: Signal<SortDirectionType>;
   sortBy: Signal<string>;
-  fk: Signal<string>;
+  foreignKey: string;
   cellChangeMap: Signal<Map<string, any>>;
-  columns: Signal<ColumnDefsType>;
+  columnDefs: ColumnDefsType;
+  groupBy?: string;
+  showGroupByColumn?: boolean;
 } | null>(null);
 
 export const Table: React.FC<TableType> = ({
   foreignKey,
   rowData,
   columnDefs,
+  groupBy,
+  showGroupByColumn,
   handleSubmit,
   renderButton,
 }) => {
   const [_, setReady] = useState<boolean>(false);
+  const [colors] = useState(["cyan", "green", "indigo", "red", "teal", "emerald", "rose", "purple", "violet", "fuchsia", "blue", "orange", "amber", "lime", "yellow", "pink", "sky"]);
   const [rd, setRd] = useState<Array<TableRecordType>>()
-  const columns = useSignal<ColumnDefsType>([]);
   const cellChangeMap = useSignal(new Map());
   const rows = useSignal<Array<TableRecordType>>([]);
-  const fk = useSignal<string>('');
   const sortBy = useSignal<string>('');
   const sortDirection = useSignal<SortDirectionType>('none');
-  const sortedRows = useComputed(() =>
-    sortDirection.value === 'none'
+  const sortedRows = useComputed(() => {
+    if(rows.value && sortDirection.value === 'none' && groupBy) {
+      return sort(rows.value, groupBy, true)
+    }
+    return (
+      sortDirection.value === 'none'
       ? rows.value
       : sort(rows.value, sortBy.value, sortDirection.value === 'dsc')
-  );
+    )
+  }
+  
+);
   // use later to provide table reset function
   const init = useCallback(() => {
-    columns.value = columnDefs;
     rows.value = rd!;
-    fk.value = foreignKey;
     setReady(true);
   }, [columnDefs, rd]);
 
@@ -78,16 +90,31 @@ export const Table: React.FC<TableType> = ({
 
   useEffect(() => {
     if(rowData) {
-      let x: TableRecordType[] = rowData.map(r => {
-        let uniqueId = r[foreignKey] as string;
-        return (
+      let count = 0
+      let groupColorMap = new Map<string, number>([])
+      let colorsUsed = new Set()
+      let x: TableRecordType[] = []
+      for (const item of rowData) {
+        let uniqueId = item[foreignKey] as string;
+        let color = ""
+        let hasColor = groupBy && groupColorMap.has(item[groupBy]  as string)
+        if(groupBy && hasColor) {
+          color = colors[groupColorMap.get(item[groupBy]  as string) as number]
+        }
+        if(groupBy && !hasColor){
+          count += 1
+          groupColorMap.set(item[groupBy] as string, count)
+          color = colors[count]
+        }
+        x.push(
           {
-            ...r,
+            ...item,
             id: uniqueId,
             element: (
               <Row
+                color={color}
                 row={
-                  Object.entries(r).filter((rr) =>
+                  Object.entries(item).filter((rr) =>
                   columnDefs.map((c) => c.field).includes(rr[0])
                   ) as [string, string][]
                 }
@@ -96,7 +123,7 @@ export const Table: React.FC<TableType> = ({
             )
           }
         )
-      })
+      }
       setRd(x)
     }
   }, [rowData]);
@@ -107,9 +134,11 @@ export const Table: React.FC<TableType> = ({
         sortedRows,
         sortDirection,
         sortBy,
-        fk,
+        foreignKey,
         cellChangeMap,
-        columns,
+        columnDefs,
+        groupBy,
+        showGroupByColumn
       }}
     >
       <SubmitWrapper handleSubmit={handleSubmit}>

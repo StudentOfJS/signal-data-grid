@@ -12,12 +12,15 @@ function App() {
     setRowData(data)
     setLoading(false)
   }, [])
+
   return (
     <div className="w-full flex flex-col items-center">
       {loading ? (<h1 className="text-5xl">Creating mock data</h1>) : (<h1 className="text-5xl">React Signals Data Grid</h1>)}
       <div className="pt-10">
         <Table
           rowData={rowData}
+          groupBy={'group'}
+          showGroupByColumn={true}
           columnDefs={[
             {
               field: 'date',
@@ -25,12 +28,12 @@ function App() {
               cellOptions: { type: 'date' },
             },
             {
-              field: 'test2',
+              field: 'random',
               cellOptions: { type: 'number' },
               isSortable: true,
             },
             {
-              field: 'test3',
+              field: 'email',
               isEditable: true,
               cellOptions: { type: 'email' },
               validation: (value) => {
@@ -43,6 +46,9 @@ function App() {
                 return true
               },
               isSortable: true,
+            },
+            {
+              field: 'group',
             },
           ]}
           foreignKey={'id'}

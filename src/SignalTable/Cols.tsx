@@ -7,19 +7,29 @@ export function Cols() {
   return (
     <thead className="bg-white border-b block md:table-header-group">
       <tr className="border border-slate-400 block md:table-row">
-        {ctx?.columns.value.map(({ field, isSortable }) => (
-          <th
-            className="text-sm font-medium text-white bg-slate-700 px-6 py-4 text-center block md:table-cell"
-            scope="col"
-            key={field}
-            style={{ position: 'relative' }}
-          >
-            {/* <div className="flex items-center"> */}
-            {field}
-            {isSortable && <Sort field={field} />}
-            {/* </div> */}
-          </th>
-        ))}
+        {ctx?.columnDefs.map(({ field, isSortable }) =>
+          field === ctx.groupBy && !ctx.showGroupByColumn ? (
+            <th
+              className="hidden"
+              scope="col"
+              key={field}
+              style={{ position: 'relative' }}
+            >
+              {field}
+              {isSortable && <Sort field={field} />}
+            </th>
+          ) : (
+            <th
+              className="text-sm font-medium text-white bg-slate-700 px-6 py-4 text-center block md:table-cell"
+              scope="col"
+              key={field}
+              style={{ position: 'relative' }}
+            >
+              {field}
+              {isSortable && <Sort field={field} />}
+            </th>
+          )
+        )}
       </tr>
     </thead>
   );
