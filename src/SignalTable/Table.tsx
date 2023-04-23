@@ -19,7 +19,7 @@ type ColumnDefsType = Array<{
   validation?: (value: string | number | boolean) => boolean // field validation function -> return true if valid
 }>;
 
-type TableDataType = Array<Record<string, string | number | boolean | null>>
+export type TableDataType = Array<Record<string, string | number | boolean | null>>
 
 type TableRecordType = Record<string, string | number | boolean | null | JSX.Element | undefined>
 
@@ -92,7 +92,6 @@ export const Table: React.FC<TableType> = ({
     if(rowData) {
       let count = 0
       let groupColorMap = new Map<string, number>([])
-      let colorsUsed = new Set()
       let x: TableRecordType[] = []
       for (const item of rowData) {
         let uniqueId = item[foreignKey] as string;

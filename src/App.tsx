@@ -1,5 +1,5 @@
 import './index.css';
-import { Table } from './SignalTable/Table';
+import { Table, type TableDataType } from './SignalTable/Table';
 import { useEffect, useState } from 'react';
 import { generateTestData, type TestData } from './generateData';
 
@@ -18,7 +18,7 @@ function App() {
       {loading ? (<h1 className="text-5xl">Creating mock data</h1>) : (<h1 className="text-5xl">React Signals Data Grid</h1>)}
       <div className="pt-10">
         <Table
-          rowData={rowData}
+          rowData={rowData as any as TableDataType}
           groupBy={'group'}
           showGroupByColumn={true}
           columnDefs={[
@@ -49,6 +49,7 @@ function App() {
             },
             {
               field: 'group',
+              isSortable: true,
             },
           ]}
           foreignKey={'id'}
