@@ -34,7 +34,7 @@ function getRandomDate(start: Date, end: Date): string {
 export function generateTestData(rows: number): TestData[] {
   const testData: TestData[] = [];
   const startDate = new Date('2023-01-01');
-  const endDate = new Date('2023-12-31');
+  const endDate = new Date('2025-2-21');
 
   for (let i = 1; i <= rows; i++) {
     testData.push({

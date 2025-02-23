@@ -8,7 +8,7 @@ function App() {
   const [rowData, setRowData] = useState<TestData[]>()
 
   useEffect(() => {
-    const data = generateTestData(100);
+    const data = generateTestData(1000);
     setRowData(data)
     setLoading(false)
   }, [])
