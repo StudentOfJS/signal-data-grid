@@ -38,26 +38,29 @@ export function Cell({
     }
   });
   return (
-    <td className="border border-slate-300 block md:table-cell">
-      <span className="inline-block w-1/3 md:hidden font-bold">{name}</span>
+    <td className="border border-slate-300 block sm:table-cell">
+      <label htmlFor={`${name}-${rowId}`} className="block text-center not-sr-only sm:sr-only">{name}</label>
       {colDef?.isEditable ? (
-        <input
-          className={`text-sm font-light px-6 py-4 whitespace-nowrap text-center`}
-          {...colDef?.cellOptions!}
-          name={name}
-          defaultValue={type === 'date' ? datefix(cellValue) : cellValue}
-          onChange={(e) => {
-            cv.value = e.target.value;
-          }}
-          ref={ref}
-        />
+          <input
+            id={`${name}-${rowId}`}
+            className={`text-sm font-light px-6 py-4 whitespace-nowrap text-center w-full`}
+            {...colDef?.cellOptions}
+            name={name}
+            defaultValue={type === 'date' ? datefix(cellValue) : cellValue}
+            onChange={(e) => {
+              cv.value = e.target.value;
+            }}
+            ref={ref}
+          />
       ) : (
         <input
-          className={`text-sm font-light px-6 py-4 whitespace-nowrap text-center bg-transparent`}
+          id={`${name}-${rowId}`}
+          className={`text-sm font-light px-6 py-4 whitespace-nowrap text-center bg-transparent w-full`}
           type="text"
           name={name}
           value={cellValue}
           disabled={true}
+          aria-label={name}
         />
       )}
     </td>

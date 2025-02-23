@@ -49,7 +49,7 @@ function App() {
           handleSubmit={(data) => {
             console.log(data);
           }}
-          renderButton={() => <button type="submit">Save</button>}
+          renderButton={() => <button type="submit" aria-label="Save Data">Save</button>}
         />
       </div>
     </div>

@@ -5,11 +5,11 @@ import { SortDirectionType, TableContext } from '../SignalTable/Table';
 export function Cols() {
   const ctx = useContext(TableContext);
   return (
-    <thead className="bg-white border-b block md:table-header-group">
-      <tr className="border border-slate-400 block md:table-row">
+    <thead className="bg-white border-b block sm:table-header-group">
+      <tr className="border border-slate-400 block sm:table-row">
         {ctx?.columns.value.map(({ field, isSortable }) => (
           <th
-            className="text-sm font-medium text-white bg-slate-700 px-6 py-4 text-center block md:table-cell"
+            className="text-sm font-medium text-white bg-slate-700 px-6 py-4 text-center block sm:table-cell"
             scope="col"
             key={field}
             style={{ position: 'relative' }}
@@ -31,6 +31,7 @@ function Sort({ field }: { field: string }) {
     <button
       type="button"
       className="m-0 ml-4 p-1"
+      aria-label={`Sort by ${field}`}
       onClick={() => {
         if (ctx) {
           let { sortBy, sortDirection } = ctx;
