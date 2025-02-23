@@ -1,11 +1,7 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
-  useSignal,
-  useComputed,
-  type ReadonlySignal,
-  type Signal,
+  signal,
 } from '@preact/signals-react';
-import { sort } from './sort';
 import { SubmitWrapper } from './SubmitWrapper';
 import { Cols } from './Cols';
 import { Rows } from './Rows';
@@ -33,16 +29,14 @@ interface TableType {
 
 export type SortDirectionType = 'asc' | 'dsc' | 'none';
 
-export const TableContext = createContext<{
-  sortedRows: ReadonlySignal<
-    TableRecordType[]
-  >;
-  sortDirection: Signal<SortDirectionType>;
-  sortBy: Signal<string>;
-  fk: Signal<string>;
-  cellChangeMap: Signal<Map<string, any>>;
-  columns: Signal<ColumnDefsType>;
-} | null>(null);
+export const columns = signal<ColumnDefsType>([]);
+export const cellChangeMap = signal(new Map());
+export const rows = signal<Array<TableRecordType>>([]);
+export const fk = signal<string>('');
+export const sortBy = signal<string>('');
+export const sortDirection = signal<SortDirectionType>('none');
+export const columnWidths = signal<Record<string, number>>({});
+
 
 export const Table: React.FC<TableType> = ({
   foreignKey,
@@ -52,33 +46,14 @@ export const Table: React.FC<TableType> = ({
   renderButton,
 }) => {
   const [_, setReady] = useState<boolean>(false);
-  const [rd, setRd] = useState<Array<TableRecordType>>()
-  const columns = useSignal<ColumnDefsType>([]);
-  const cellChangeMap = useSignal(new Map());
-  const rows = useSignal<Array<TableRecordType>>([]);
-  const fk = useSignal<string>('');
-  const sortBy = useSignal<string>('');
-  const sortDirection = useSignal<SortDirectionType>('none');
-  const sortedRows = useComputed(() =>
-    sortDirection.value === 'none'
-      ? rows.value
-      : sort(rows.value, sortBy.value, sortDirection.value === 'dsc')
-  );
-  // use later to provide table reset function
+
   const init = useCallback(() => {
-    columns.value = columnDefs;
-    rows.value = rd!;
-    fk.value = foreignKey;
-    setReady(true);
-  }, [columnDefs, rd]);
-
-  useEffect(() => {
-    init();
-  }, [columnDefs, rd]);
-
-  useEffect(() => {
-    if(rowData) {
-      let x: TableRecordType[] = rowData.map(r => {
+    if(columnDefs && rowData) {
+      columns.value = columnDefs;
+      fk.value = foreignKey;
+      sortBy.value = '';
+      sortDirection.value = 'none';
+      rows.value = rowData.map(r => {
         let uniqueId = r[foreignKey] as string;
         return (
           {
@@ -97,28 +72,25 @@ export const Table: React.FC<TableType> = ({
           }
         )
       })
-      setRd(x)
+      setReady(true);
     }
-  }, [rowData]);
+  }, [columnDefs, rowData]);
+
+  useEffect(() => {
+    init();
+  }, [columnDefs, rowData]);
 
   return (
-    <TableContext.Provider
-      value={{
-        sortedRows,
-        sortDirection,
-        sortBy,
-        fk,
-        cellChangeMap,
-        columns,
-      }}
-    >
+    <>
       <SubmitWrapper handleSubmit={handleSubmit}>
-        <table className="min-w-full table-auto border border-slate-400">
-          <Cols />
-          <Rows />
-        </table>
+        <div className="w-full overflow-x-auto">
+          <table className="w-full whitespace-nowrap">
+            <Cols />
+            <Rows />
+          </table>
+        </div>
         {renderButton && renderButton()}
       </SubmitWrapper>
-    </TableContext.Provider>
+    </>
   );
 };

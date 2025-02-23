@@ -1,23 +1,21 @@
 import { useSignalEffect } from '@preact/signals-react';
-import { useContext, useState } from 'react';
-import { SortDirectionType, TableContext } from '../SignalTable/Table';
+import { useState } from 'react';
+import { columns, rows, sortBy, sortDirection, SortDirectionType } from './Table';
+import { sort } from './sort';
 
 export function Cols() {
-  const ctx = useContext(TableContext);
   return (
-    <thead className="bg-white border-b block sm:table-header-group">
-      <tr className="border border-slate-400 block sm:table-row">
-        {ctx?.columns.value.map(({ field, isSortable }) => (
+    <thead className="bg-white border-b block md:table-header-group">
+      <tr className="border border-slate-400 block md:table-row">
+        {columns.value.map(({ field, isSortable }) => (
           <th
-            className="text-sm font-medium text-white bg-slate-700 px-6 py-4 text-center block sm:table-cell"
+            className="text-sm font-medium text-white bg-slate-700 px-6 py-4 text-center block md:table-cell"
             scope="col"
             key={field}
             style={{ position: 'relative' }}
           >
-            {/* <div className="flex items-center"> */}
             {field}
             {isSortable && <Sort field={field} />}
-            {/* </div> */}
           </th>
         ))}
       </tr>
@@ -26,28 +24,26 @@ export function Cols() {
 }
 
 function Sort({ field }: { field: string }) {
-  const ctx = useContext(TableContext);
+  const handleSort = () => {
+    sortBy.value = field;
+    switch (sortDirection.value) {
+      case 'none':
+        sortDirection.value = 'asc';
+        break;
+      case 'asc':
+        sortDirection.value = 'dsc';
+        break;
+      default:
+        sortDirection.value = 'asc';
+    }
+    rows.value = sort(rows.value, sortBy.value, sortDirection.value === 'dsc');
+  };
+
   return (
     <button
       type="button"
       className="m-0 ml-4 p-1"
-      aria-label={`Sort by ${field}`}
-      onClick={() => {
-        if (ctx) {
-          let { sortBy, sortDirection } = ctx;
-          sortBy.value = field;
-          switch (sortDirection.value) {
-            case 'none':
-              sortDirection.value = 'asc';
-              break;
-            case 'asc':
-              sortDirection.value = 'dsc';
-              break;
-            default:
-              sortDirection.value = 'asc';
-          }
-        }
-      }}
+      onClick={handleSort}
       style={{
         position: 'absolute',
         right: 5,
@@ -68,11 +64,10 @@ function Sort({ field }: { field: string }) {
 }
 
 function PathWarrior({ field }: { field: string }) {
-  const ctx = useContext(TableContext);
   const [sort, setSort] = useState<SortDirectionType>('none');
   useSignalEffect(() => {
-    if (ctx?.sortBy.value === field) {
-      setSort(ctx?.sortDirection.value ?? 'none');
+    if (sortBy.value === field) {
+      setSort(sortDirection.value ?? 'none');
     } else {
       setSort('none');
     }

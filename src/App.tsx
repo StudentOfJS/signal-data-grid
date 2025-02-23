@@ -15,22 +15,23 @@ function App() {
   return (
     <div className="w-full flex flex-col items-center">
       {loading ? (<h1 className="text-5xl">Creating mock data</h1>) : (<h1 className="text-5xl">React Signals Data Grid</h1>)}
-      <div className="pt-10">
+      <div className="pt-10 w-full">
         <Table
           rowData={rowData}
           columnDefs={[
             {
-              field: 'date',
+              field: 'Creation date',
               isEditable: true,
               cellOptions: { type: 'date' },
+              isSortable: true,
             },
             {
-              field: 'test2',
+              field: 'Code',
               cellOptions: { type: 'number' },
               isSortable: true,
             },
             {
-              field: 'test3',
+              field: 'Email address',
               isEditable: true,
               cellOptions: { type: 'email' },
               validation: (value) => {

@@ -1,8 +1,8 @@
 export interface TestData {
   id: number;
-  date: string;
-  test2: number;
-  test3: string;
+  "Creation date": string;
+  Code: number;
+  "Email address": string;
 }
 
 function getRandomInt(min: number, max: number): number {
@@ -39,9 +39,9 @@ export function generateTestData(rows: number): TestData[] {
   for (let i = 1; i <= rows; i++) {
     testData.push({
       id: i,
-      date: getRandomDate(startDate, endDate),
-      test2: getRandomInt(1, 100),
-      test3: getRandomEmail(),
+      "Creation date": getRandomDate(startDate, endDate),
+      Code: getRandomInt(1, 100),
+      "Email address": getRandomEmail(),
     });
   }
   return testData;
