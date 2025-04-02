@@ -83,8 +83,8 @@ export const Table: React.FC<TableType> = ({
   return (
     <>
       <SubmitWrapper handleSubmit={handleSubmit}>
-        <div className="w-full overflow-x-auto">
-          <table className="w-full whitespace-nowrap">
+        <div className="w-full max-h-96 overflow-scroll">
+          <table className="w-full whitespace-nowrap border-collapse border border-slate-700 text-sm text-left text-gray-500 dark:text-gray-400">
             <Cols />
             <Rows />
           </table>

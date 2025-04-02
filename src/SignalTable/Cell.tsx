@@ -43,7 +43,7 @@ export function Cell({
     <td 
       className="border border-slate-300"
       style={{ 
-        width: columnWidths.value[name] ? `${columnWidths.value[name]}px` : '200px',
+        width: columnWidths.value[name] ? `${columnWidths.value[name]}px` : '100%',
         minWidth: '150px',
         maxWidth: columnWidths.value[name] ? `${columnWidths.value[name]}px` : '200px',
         overflow: 'hidden'
@@ -53,7 +53,7 @@ export function Cell({
       {colDef?.isEditable ? (
           <input
             id={`${name}-${rowId}`}
-            className="text-sm font-light px-6 py-4 text-center w-full overflow-hidden text-ellipsis"
+            className="text-sm font-light px-6 py-4 text-center w-full overflow-hidden text-ellipsis text-black"
             {...colDef?.cellOptions}
             name={name}
             defaultValue={type === 'date' ? datefix(cellValue) : cellValue}
@@ -65,11 +65,11 @@ export function Cell({
       ) : (
         <input
           id={`${name}-${rowId}`}
-          className={`text-sm font-light px-6 py-4 whitespace-nowrap text-center bg-transparent w-full`}
+          className={`text-sm font-light px-6 py-4 whitespace-nowrap text-center text-black bg-transparent w-full`}
           type="text"
           name={name}
           value={cellValue}
-          disabled={true}
+          readOnly={true}
           aria-label={name}
         />
       )}

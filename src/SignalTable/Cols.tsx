@@ -42,7 +42,7 @@ function Sort({ field }: { field: string }) {
   return (
     <button
       type="button"
-      className="m-0 ml-4 p-1"
+      className="m-0 ml-12 p-1"
       onClick={handleSort}
       style={{
         position: 'absolute',
