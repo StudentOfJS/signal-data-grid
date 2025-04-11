@@ -12,6 +12,7 @@
     "@preact/signals-react": "^3.0.1",
     "@tailwindcss/vite": "^4.0.8",
     "react": "19.0.0",
+    "react-aria": "^3.38.1",
     "react-dom": "19.0.0"
   },
   "devDependencies": {
